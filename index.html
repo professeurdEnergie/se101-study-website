@@ -2406,7 +2406,7 @@ LESSONS.l1 = {
   steps: [{ id: 'prereq', label: 'Prerequisite check' }].concat(
     L1CHUNKS.flatMap((c, i) => [{ id: 'learn-' + c.id, label: `Chunk ${i + 1}: ${c.title}` }, { id: 'quiz-' + c.id, label: `Chunk ${i + 1}: check` }]),
     [{ id: 'cards', label: 'Flashcards (15 cards rated)' }, { id: 'game', label: 'One memorization game' }, { id: 'review', label: 'Mixed review' }, { id: 'summary', label: 'Summary read' }]),
-  next: { n: 2, title: 'Generative AI in software engineering' },
+  next: { n: 4, title: 'Requirements', module: '04', why: 'it carries 81 practice-set marks and builds directly on this lesson; in course order, Lesson 2 (generative AI, 27 marks) would come first' },
 };
 
 /* ==== 70-views-a.js ==== */
@@ -2656,7 +2656,7 @@ function buildSummary() {
   L2.push(ms.length ? '\nQuestions still missed: ' + ms.map(q => `${q.id} (${cut(strip(q.prompt), 80)})`).join(' | ') : '\nNo questions are currently marked as missed.');
   const pk = Object.values(S().pred); if (pk.length) L2.push(`Predictions made: ${pk.length}; matched: ${pk.filter(p => p.ok).length}.`);
   const g = S().games; L2.push('Games played: ' + (['match', 'sort', 'order', 'speed'].map(x => `${x} ${(g[x] || {}).plays || 0}`).join(', ')) + '.');
-  L2.push(`\nNEXT: please build Lesson ${L.next.n}: ${L.next.title} (course module 02), unless I say otherwise. I have about 45 minutes per session, a laptop, and I learn best from flashcards, memorization games, clear diagrams and typed-answer quizzes.`);
+  L2.push(`\nNEXT: please build Lesson ${L.next.n}: ${L.next.title} (course module ${L.next.module}; ${L.next.why}), unless I say otherwise. I have about 45 minutes per session, a laptop, and I learn best from flashcards, memorization games, clear diagrams and typed-answer quizzes.`);
   L2.push('Keep the same site and format: open index.html in the repository, reuse its engine (lesson registry, glossary, flashcards with again/hard/easy, games, rubric-checked typed answers with model answer and self-marking, adaptive questions, predict-then-reveal, fading worked examples, mixed review, copyable summary), add the new lesson, update the course map and glossary, keep the localStorage key and my saved progress, and base everything on the PDFs in the repository, following the course\'s own notation and pointing out where it differs from common usage.');
   return L2.join('\n');
 }

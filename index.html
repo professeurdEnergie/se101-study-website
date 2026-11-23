@@ -2380,7 +2380,7 @@ Q({ id: 'pq3', type: 'mcq', obj: 'P0', diff: 1, prompt: 'What is a software <b>r
 
 LESSONS.l1 = {
   id: 'l1', n: 1, title: 'Process models and agile practice', modules: '00b, 01, 01b', practiceMarks: 41,
-  tagline: 'Why we build software in a particular order, and which bet each order makes.',
+  tagline: 'Why we build software in a particular order, and which bet each order makes. About 75 minutes in full, 20 on the express route.',
   objectives: [
     { id: 'O1', text: 'Define a <b>process model</b>, and explain what makes a process an <b>engineering</b> process rather than a habit.' },
     { id: 'O2', text: 'Describe the <b>waterfall</b> model, state its central risk, and say what it bets about the requirements.' },
@@ -2434,7 +2434,7 @@ function renderNav() {
   const tick = id => Progress.stepDone(id) ? '<span class="tick" aria-label="done">✓</span>' : '';
   const link = (href, text, cls = '', extra = '') => `<a href="#${href}" class="${cls}${on(href)}">${text}${extra}</a>`;
   $('#nav').innerHTML = `<h4>Course</h4>${link('/', 'Home and plan')}${link('/overview', 'What the quiz tests')}${link('/glossary', 'Glossary')}
-    <h4>Lesson 1</h4>${link('/l1', 'Lesson overview')}${link('/l1/prereq', 'Prerequisite check', '', tick('prereq'))}
+    <h4>Lesson 1</h4>${link('/l1', 'Lesson overview')}${link('/l1/keys', 'Key ideas (3-minute skim)')}${link('/l1/prereq', 'Prerequisite check', '', tick('prereq'))}
     ${L.chunks.map((c, i) => link('/l1/learn/' + c.id, `${i + 1}. ${esc(c.short || c.title)}`, '', Progress.stepDone('quiz-' + c.id) ? '<span class="tick">✓</span>' : '')).join('')}
     ${link('/l1/cards', 'Flashcards', '', tick('cards'))}${link('/l1/games', 'Games', '', tick('game'))}${link('/l1/review', 'Mixed review', '', tick('review'))}${link('/l1/summary', 'Summary and next steps', '', tick('summary'))}
     <h4>Later lessons</h4><a class="locked" href="#/" title="Lessons 2 to 13 are built in later chats; see the plan on the home page.">Lessons 2 to 13: see the plan</a>
@@ -2466,9 +2466,9 @@ const Router = {
 Router.add(/^$/, el => {
   const L = LESSONS.l1, pr = Progress.lessonProgress(L), nx = nextStep(L);
   el.innerHTML = `<h1>SE 101: study plan for the Thursday quiz</h1>
-  <p class="muted">Built from the course slides, the two practice sets and the Quiz 1 paper and key in the repository. Each lesson fits one study session.</p>
+  <p class="muted">Built from the course slides, the two practice sets and the Quiz 1 paper and key in the repository. A full lesson takes more than one 45-minute session, so each lesson also has a short express route.</p>
   <div class="callout key"><b class="t">Which quiz is on Thursday?</b>The Quiz 1 paper in the repository is dated Thursday 29 October 2026, so it has already been held. The term-project slides place <b>Quiz 2 on the morning of Thursday 26 November</b>, and Practice Set 2 states that Quiz 2 is <b>cumulative</b>: it covers everything in both practice sets (process, version control, requirements, testing, generative AI, architecture, Scrum, databases, intellectual property, professionalism, safety). Technical communication is not on it. If your quiz is a different one, tell me and the plan changes.</div>
-  <div class="callout warn"><b class="t">The time arithmetic</b>At about 45 minutes a lesson, lessons 1 to 12 take roughly 9 hours. Three 45-minute sessions before Thursday cover three lessons. Reaching 80% on a cumulative quiz from zero needs more time than that (for example two sessions a day), or the shorter core path of each lesson. The tiers below show where the marks are. Tell me how much time you really have and I will reorder.</div>
+  <div class="callout warn"><b class="t">The time arithmetic</b>A full lesson takes 75 to 90 minutes here, so lessons 1 to 12 would take well over 10 hours. Three 45-minute sessions cover very little of that. Reaching 80% on a cumulative quiz from zero needs more time (for example two sessions a day), or the express route of each lesson (about 20 minutes: key ideas, flashcards, mixed review) with the full lesson only where your scores are low. The priority column shows where the marks are. Tell me how much time you really have and I will reorder.</div>
   <div class="card"><div class="row spread"><div><h3 style="margin:0">Lesson 1: ${esc(L.title)}</h3><span class="muted small">${esc(L.tagline)}</span></div>
     <a class="btn primary" href="#${nx.href}">${pr.done ? 'Continue' : 'Start'}: ${esc(nx.label)}</a></div>
     <div class="row" style="margin-top:12px"><div class="bar"><i style="width:${pr.p * 100}%"></i></div><b>${pr.done}/${pr.total} steps</b></div></div>
@@ -2477,7 +2477,9 @@ Router.add(/^$/, el => {
   ${PLAN.map(p => `<tr><td>${p.n}</td><td>${p.n === 1 ? `<a href="#/l1">${esc(p.title)}</a>` : esc(p.title)}</td><td>${p.mods}</td><td>${p.marks}</td><td>${p.tier ? `<span class="chip ${p.tier === 'A' ? 'brand' : ''}">${p.tier}</span>` : ''}</td><td class="small">${esc(p.pre)}</td><td>${p.n === 1 ? '<span class="chip good">built</span>' : '<span class="chip">next chat</span>'}</td></tr>`).join('')}</table>
   <p class="small muted">Priority A: the most practice-set marks (testing, requirements, version control) or the foundation for everything else. B: mid weight, mostly concept and scenario questions. C: light. Marks are the totals of the two practice sets (558 in all); how the real quiz is weighted is not stated in the materials. Quiz 1 weighted process 10, version control 14, requirements 12, testing 14 (50 marks, 90 minutes).</p>
   <h2>How this site works</h2>
-  <ul><li><b>Learn</b> in small sections with a diagram, then <b>predict</b> before the answer is revealed.</li><li><b>Type your answers.</b> A rubric of key points checks them and shows what you covered and missed. The check is keyword matching, not understanding: if it is wrong, mark yourself correct or incorrect.</li><li><b>Missed questions come back</b>, in the same set and in the mixed review.</li><li>Progress is saved in this browser (localStorage). <button class="btn sm danger" data-reset="1">Reset all progress</button></li></ul>`;
+  <p class="small muted">Lesson 1 is only 41 of the 558 practice-set marks. If time is short, do its express route and move on to the higher-weight lessons.</p>
+  <ul><li><b>Learn</b> in small sections with a diagram, then <b>predict</b> before the answer is revealed.</li><li><b>Type your answers.</b> A rubric of key points checks them and shows what you covered and missed. The check is keyword matching, not understanding: if it is wrong, mark yourself correct or incorrect.</li><li><b>Missed questions come back</b>, in the same set and in the mixed review.</li><li>Progress is saved in this browser (localStorage). <button class="btn sm danger" data-reset="1">Reset all progress</button></li></ul>
+  <p class="tiny muted"><a href="#/selftest">Self-test</a>: checks in your browser that every model answer passes its own rubric.</p>`;
 });
 
 function nextStep(L) {
@@ -2520,7 +2522,7 @@ Router.add(/^overview$/, el => {
 /* ---------- lesson hub ---------- */
 Router.add(/^l1$/, el => {
   const L = LESSONS.l1, pr = Progress.lessonProgress(L), nx = nextStep(L), depth = S().settings.depth;
-  const coreMin = 45, fullMin = 60;
+  const coreMin = 75, fullMin = 90;
   el.innerHTML = `<p class="crumbs"><a href="#/">Home</a> › Lesson 1</p>
   <h1>Lesson 1: ${esc(L.title)}</h1><p class="muted">Modules ${L.modules} · ${esc(L.tagline)}</p>
   <div class="card"><div class="row spread"><div class="row" style="flex:1;min-width:260px"><div class="bar"><i style="width:${pr.p * 100}%"></i></div><b>${pr.done}/${pr.total} steps</b></div><a class="btn primary" href="#${nx.href}">${pr.done ? 'Continue' : 'Start'}: ${esc(nx.label)}</a></div></div>
@@ -2529,9 +2531,10 @@ Router.add(/^l1$/, el => {
   <div class="card">${L.objectives.map(o => { const m = Progress.mastery(o.id), ck = Progress.cardKnown(o.id, L); return `<div class="obj"><span class="id">${o.id}</span><span>${o.text}</span><span><div class="bar ${m.cls === 'good' ? 'good' : ''}" title="Accuracy on recent questions"><i style="width:${m.p * 100}%"></i></div><span class="tiny muted">${m.n ? pct(m.p) + ' on ' + plural(m.n, 'attempt') : 'no attempts yet'}; cards known ${ck.known}/${ck.total}</span></span><span class="chip ${m.cls}">${m.label}</span></div>`; }).join('')}
   <p class="tiny muted" style="margin:8px 0 0">Mastered means at least 80% over the last attempts, at least four attempts, and one hard question passed.</p></div>
   <h2>Your route</h2>
+  <div class="card" style="border-color:#9fd2ac"><div class="row spread"><div><b>Express route, about 20 minutes</b><div class="small muted">Short on time? Skim the key ideas, rate the flashcards, then take the mixed review.</div></div><div class="row"><a class="btn" href="#/l1/keys">1. Key ideas</a><a class="btn" href="#/l1/cards">2. Flashcards</a><a class="btn" href="#/l1/review">3. Mixed review</a></div></div></div>
   <div class="card"><div class="row" role="group" aria-label="Depth"><span><b>Depth:</b></span><button class="btn sm ${depth === 'core' ? 'primary' : ''}" data-depth="core">Core (about ${coreMin} minutes)</button><button class="btn sm ${depth === 'full' ? 'primary' : ''}" data-depth="full">Full, with optional sections (about ${fullMin} minutes)</button></div>
-  <ol style="margin-top:12px"><li><a href="#/l1/prereq">Prerequisite check</a> (2 min)</li>${L.chunks.map((c, i) => `<li><a href="#/l1/learn/${c.id}">${esc(c.title)}</a> (about ${c.minutes} min, plus a short check) ${Progress.stepDone('quiz-' + c.id) ? '<span class="chip good">done</span>' : Progress.stepDone('learn-' + c.id) ? '<span class="chip brand">read</span>' : ''}</li>`).join('')}
-  <li><a href="#/l1/cards">Flashcards</a> (5 min)</li><li><a href="#/l1/games">One game</a> (3 min, optional but recommended)</li><li><a href="#/l1/review">Mixed review</a> with exam-style questions (8 min)</li><li><a href="#/l1/summary">Summary and what to paste into the next chat</a></li></ol>
+  <ol style="margin-top:12px"><li><a href="#/l1/prereq">Prerequisite check</a> (2 min)</li>${L.chunks.map((c, i) => `<li><a href="#/l1/learn/${c.id}">${esc(c.title)}</a> (about ${c.minutes} min, plus about 3 min for the check) ${Progress.stepDone('quiz-' + c.id) ? '<span class="chip good">done</span>' : Progress.stepDone('learn-' + c.id) ? '<span class="chip brand">read</span>' : ''}</li>`).join('')}
+  <li><a href="#/l1/cards">Flashcards</a> (5 min)</li><li><a href="#/l1/games">One game</a> (3 min, optional but recommended)</li><li><a href="#/l1/review">Mixed review</a> with exam-style questions (10 min)</li><li><a href="#/l1/summary">Summary and what to paste into the next chat</a></li></ol>
   ${S().missed.length ? `<p><a class="btn sm" href="#/l1/missed">Retry ${plural(S().missed.length, 'missed question')}</a></p>` : ''}</div>
   <h2>Misconceptions to watch for</h2>
   <div class="card">${L.misconceptions.map(m => `<p style="margin:0 0 8px"><span class="chip bad">common mistake</span> <b>${m[0]}</b><br><span class="muted">${m[1]}</span></p>`).join('')}</div>
@@ -2706,6 +2709,50 @@ function showHelp() {
   <div class="row" style="justify-content:flex-end"><button class="btn primary" data-m="x">Close</button></div>`);
   $('#ovbox').onclick = e => { if (e.target.closest('[data-m]')) Modal.close(); };
 }
+
+/* ---------- key ideas: a 3-minute skim of every section's main point ---------- */
+Router.add(/^l1\/keys$/, el => {
+  const L = LESSONS.l1;
+  el.innerHTML = `<p class="crumbs"><a href="#/">Home</a> › <a href="#/l1">Lesson 1</a> › Key ideas</p><h1>Key ideas at a glance</h1>
+  <p class="muted">The one-sentence point of every section in Lesson 1. Skim it before the flashcards, or the night before the quiz. Select a title to open the full section.</p>
+  ${L.chunks.map((c, i) => `<div class="card"><h3 style="margin-top:0">Chunk ${i + 1}: ${esc(c.title)} ${c.objs.map(o => `<span class="chip brand">${o}</span>`).join(' ')}</h3>
+    <ul style="margin:0">${c.sections.map(s => `<li style="margin:6px 0"><a href="#/l1/learn/${c.id}/${s.id}"><b>${esc(s.title)}</b></a>${s.core ? '' : ' <span class="chip">optional</span>'}<br><span>${s.key}</span></li>`).join('')}</ul></div>`).join('')}
+  <div class="callout key"><b class="t">Exam habits from the materials</b><ul style="margin:4px 0 0"><li>Justify a process choice <b>in terms of the requirements</b>. A bare choice earns nothing.</li><li>For true or false, <b>the reason carries the mark</b>.</li><li>Use the course's words: <b>bet</b>, <b>build-and-fix</b>, <b>impediment</b>, <b>continuous integration as a practice</b>.</li><li>Practice questions for this lesson: Set 1, PRC-02 to PRC-10 (about 50 marks). Try them on paper after the mixed review.</li></ul></div>
+  <div class="row"><a class="btn primary" href="#/l1/cards">Flashcards</a><a class="btn" href="#/l1/review">Mixed review</a></div>`;
+});
+
+/* ---------- self-test: structural and rubric checks that run in the browser ---------- */
+function runSelfTest() {
+  const fails = []; let n = 0;
+  const ok = (c, m) => { n++; if (!c) fails.push(m); };
+  Object.values(QBANK).forEach(q => {
+    const w = q.id + ': ';
+    ok(q.prompt && q.hint, w + 'prompt and hint present');
+    if (q.type === 'mcq') { ok(q.options.filter(o => o.ok).length === 1, w + 'exactly one correct option'); q.options.forEach((o, i) => ok(o.why, w + 'option ' + i + ' has an explanation')); }
+    if (q.type === 'numeric') ok(q.fields.every(f => typeof f.answer === 'number') && q.explain, w + 'numeric answers and explanation');
+    if (['written', 'tf', 'choice'].includes(q.type)) {
+      const g = gradeRubric(q, strip(q.model));
+      ok(g.pass && g.pts.filter(x => x.w > 0).every(x => x.ok), w + 'the model answer must pass its own rubric');
+      ok(!gradeRubric(q, '').pass && gradeRubric(q, '').got === 0, w + 'a blank answer must earn nothing');
+      ok(!gradeRubric(q, 'I like pizza and the weather is nice today').pass, w + 'irrelevant text must not pass');
+      if (q.type === 'tf' || q.type === 'choice') {
+        const right = gradeQuestion(q, { choice: q.answer, text: strip(q.model) }), wrong = gradeQuestion(q, { choice: q.type === 'tf' ? !q.answer : q.choices.find(c => c !== q.answer), text: strip(q.model) });
+        ok(right.pass && !wrong.pass, w + 'the right choice with a good reason passes; the wrong choice does not');
+      }
+    }
+    if (q.simpler) ok(QBANK[q.simpler] && QBANK[q.simpler].diff <= q.diff, w + 'its simpler question exists and is not harder');
+  });
+  Object.entries(GLOSS).forEach(([id, g]) => ok(g.first, 'glossary term "' + id + '" is linked where it first appears'));
+  Object.values(LESSONS).forEach(L => { L.chunks.forEach(c => ok(c.quiz.bank.every(id => QBANK[id]), c.id + ': quiz bank questions exist')); L.cards.forEach(c => ok(c.q && c.a, 'card ' + c.id + ' has both sides')); });
+  return { n, fails };
+}
+Router.add(/^selftest$/, el => {
+  const r = runSelfTest();
+  el.innerHTML = `<p class="crumbs"><a href="#/">Home</a> › Self-test</p><h1>Self-test</h1>
+  <p class="muted">Runs in your browser. It checks that every multiple-choice question has exactly one correct option with an explanation, that every written model answer passes its own rubric, that blank and irrelevant answers earn nothing, that a wrong choice never passes a true/false or choose-and-justify question, and that every glossary term is linked.</p>
+  <div class="callout ${r.fails.length ? 'bad' : 'key'}"><b class="t">${r.fails.length ? 'Problems found' : 'All checks passed'}</b>${r.n} checks run, ${r.fails.length} failed.${r.fails.length ? `<ul>${r.fails.map(f => `<li>${esc(f)}</li>`).join('')}</ul>` : ''}</div>
+  <p class="small muted">This tests the answer checker's logic, not your understanding. The automatic check is keyword matching, so it can be wrong about a correct answer in different words: use "Mark myself correct" when it is.</p>`;
+});
 
 /* ==== 80-boot.js ==== */
 /* ---------- boot ---------- */

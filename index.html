@@ -596,7 +596,7 @@ function mountRunner(el, opts) {
   }
   function render() {
     const q = cq.q;
-    el.innerHTML = `<div class="card runner">${head()}<div class="q-prompt">${q.prompt}</div><div class="qin" style="margin-top:12px">${inputHtml()}</div>
+    el.innerHTML = `<div class="card runner" data-qid="${q.id}">${head()}<div class="q-prompt">${q.prompt}</div><div class="qin" style="margin-top:12px">${inputHtml()}</div>
       <div class="qhint"></div>
       <div class="row qbtns" style="margin-top:12px"><button class="btn primary" data-a="submit">Submit <kbd>Ctrl</kbd>+<kbd>Enter</kbd></button><button class="btn" data-a="hint">Hint <kbd>H</kbd></button><button class="btn ghost" data-a="giveup">I don't know</button></div>
       <div class="qfb" aria-live="polite"></div></div>`;

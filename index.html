@@ -293,11 +293,28 @@ const Store = {
   load() {
     let raw = null;
     try { raw = localStorage.getItem(this.key); } catch (e) { this.ok = false; }
-    try { this.data = raw ? Object.assign(this.fresh(), JSON.parse(raw)) : this.fresh(); } catch (e) { this.data = this.fresh(); }
+    let parsed = null;
+    try { parsed = raw ? JSON.parse(raw) : null; } catch (e) { parsed = null; }
+    this.data = this.repair(parsed);
     this.data.session = this.data.session || { n: 0 };
     this.data.session.n++; this.data.session.last = Date.now();
     this.saveNow();
     return this.data;
+  },
+  /* merge saved data over fresh defaults, dropping anything of the wrong type, so a damaged save cannot crash the site */
+  repair(p) {
+    const f = this.fresh(); if (!p || typeof p !== 'object' || Array.isArray(p)) return f;
+    const isObj = x => x && typeof x === 'object' && !Array.isArray(x);
+    ['steps', 'q', 'obj', 'cards', 'games', 'pred', 'we', 'seen'].forEach(k => { if (isObj(p[k])) f[k] = p[k]; });
+    if (Array.isArray(p.missed)) f.missed = p.missed.filter(x => typeof x === 'string');
+    if (isObj(p.settings)) f.settings = Object.assign(f.settings, p.settings);
+    if (f.settings.depth !== 'core' && f.settings.depth !== 'full') f.settings.depth = 'core';
+    if (isObj(p.session)) f.session = { n: Number(p.session.n) || 0 };
+    if (typeof p.created === 'number') f.created = p.created;
+    Object.keys(f.q).forEach(id => { const x = f.q[id]; if (!isObj(x) || !Array.isArray(x.hist)) delete f.q[id]; });
+    Object.keys(f.obj).forEach(id => { const x = f.obj[id]; if (!isObj(x) || !Array.isArray(x.hist)) delete f.obj[id]; });
+    Object.keys(f.cards).forEach(id => { const x = f.cards[id]; if (!isObj(x) || !isFinite(x.box)) delete f.cards[id]; });
+    return f;
   },
   save() { clearTimeout(this.timer); this.timer = setTimeout(() => this.saveNow(), 120); },
   saveNow() {

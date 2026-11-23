@@ -24,7 +24,8 @@ h1{font-size:1.85rem} h2{font-size:1.4rem} h3{font-size:1.14rem} h4{font-size:1r
 p{margin:0 0 .85em} ul,ol{margin:0 0 .85em;padding-left:1.35em} li{margin:.2em 0}
 a{color:var(--brand)} a:hover{color:var(--brand-d)}
 code,kbd,pre{font-family:var(--mono)} code{background:var(--soft);padding:.05em .35em;border-radius:5px;font-size:.9em}
-kbd{background:#fff;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:.02em .4em;font-size:.82em}
+kbd{background:#fff;color:var(--ink);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:.02em .4em;font-size:.82em}
+.btn.primary kbd,.btn.good kbd{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.55);color:#fff}
 :focus-visible{outline:3px solid #f59f00;outline-offset:2px;border-radius:4px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 button{font:inherit;cursor:pointer}
@@ -51,8 +52,9 @@ button{font:inherit;cursor:pointer}
 /* surfaces */
 .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px 24px;margin:0 0 18px;box-shadow:var(--shadow)}
 .card.flat{box-shadow:none}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.grid2>*,.grid3>*,.gm>*{min-width:0}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .spread{justify-content:space-between}
 .muted{color:var(--muted)} .small{font-size:.88rem} .tiny{font-size:.78rem}
@@ -99,7 +101,7 @@ table.t th,table.t td{border:1px solid var(--line);padding:7px 10px;text-align:l
 table.t th{background:var(--soft)}
 
 /* code */
-pre.code{background:var(--code-bg);color:var(--code-ink);padding:14px 16px;border-radius:9px;overflow:auto;font-size:.88rem;line-height:1.5;margin:0 0 12px}
+pre.code{max-width:100%;background:var(--code-bg);color:var(--code-ink);padding:14px 16px;border-radius:9px;overflow:auto;font-size:.88rem;line-height:1.5;margin:0 0 12px}
 pre.code code{background:none;padding:0;color:inherit;font-size:inherit;border-radius:0}
 pre.code .k{color:#c4a7ff} pre.code .f{color:#7dd3fc}
 pre.code .s{color:#a7f3d0} pre.code .c{color:#94a3b8;font-style:italic} pre.code .n{color:#fcd34d} pre.code .d{color:#f9a8d4} pre.code .b{color:#7dd3fc} pre.code .o{color:#cbd5e1}
@@ -1596,7 +1598,7 @@ const L1CHUNKS = [
 <tr><td>Never compared with its results</td><td>Improved from its own results</td></tr></table>` },
       { id: 'c1s2', title: 'Software engineering, and a one-character bug', core: true, key: 'Fixing a defect is easy. Having a process that finds it is the engineering.',
         html: `<p>The course defines {{software-engineering}} as a systematic, disciplined process to build software that is functional, efficient, safe, dependable and maintainable, <i>and</i> to build the tools and processes that enable and improve that process.</p>
-<p><b>An example from Lab 1.</b> You were given a small program that computes a triangle's area from its three side lengths using Heron's formula. One line used <code>(s - c)</code> where <code>(s - b)</code> belonged. For a 3-4-5 triangle it printed 8.485281. The correct area is 6. It never crashed. It was wrong every single time.</p>
+<p><b>An example from Lab 1.</b> You were given a small program that computes a triangle's area from three points, by finding the three side lengths and applying Heron's formula. One line used <code>(s - c)</code> where <code>(s - b)</code> belonged. For a 3-4-5 triangle it printed 8.485281. The correct area is 6. It never crashed. It was wrong every single time.</p>
 <p>Read it against the definition:</p>
 <ul><li><b>Functional?</b> No, and nothing said so.</li><li><b>Dependable?</b> It never crashed. It was wrong every time.</li><li><b>Safe?</b> Put that function in something that matters and the question stops being rhetorical.</li></ul>
 <p>The defect took one minute to fix. <b>Knowing it was there is the engineering, and that is what took the process.</b></p>` },
@@ -1657,7 +1659,8 @@ const L1CHUNKS = [
         html: `<p>The {{evolutionary}} makes the opposite bet: that the requirements are <i>not</i> stable, and that the cheapest way to find them is to build something small and look at it. It builds a series of versions. <b>Each version is a complete, working, small system.</b> New versions implement new and evolved requirements, including the ones you only discovered by watching someone use the last version.</p>
 <div data-w="evolutionary"></div>
 <p>So, besides the code, what is expected to change from version to version is <b>the requirements</b>. Waterfall treats them as fixed once its first phase is done.</p>
-<div class="callout warn"><b class="t">The cost</b>Without discipline it decays into {{build-and-fix}}: changes piled on without design or verification. The discipline is what the rest of the course is about.</div>` },
+<div class="callout warn"><b class="t">The cost</b>Without discipline it decays into {{build-and-fix}}: changes piled on without design or verification. The discipline is what the rest of the course is about.</div>
+<p class="muted small"><b>Course usage.</b> The course says "iterative or evolutionary" for this family (Quiz 1 does, in question 1a). Some textbooks separate iterative, incremental and evolutionary development; for the quiz, use the course's wording.</p>` },
       { id: 'c3s2', title: 'Why feedback frequency matters', core: true, key: 'Both processes can build the wrong thing. They differ in how long the mistake survives.',
         html: `<p>In waterfall the customer first sees working software near the end, so a wrong assumption made in week 1 stays in the product, with everything built on top of it, until then. In an evolutionary process each version goes in front of users, so the same mistake is found at the next release. That is the {{feedback-loop|feedback loop}} the evolutionary model buys.</p>
 <div data-pred="p-bet"></div>
@@ -1709,7 +1712,8 @@ const L1CHUNKS = [
 <p>Why daily, and not "when the feature is finished"? A {{branch}} that has not been integrated for a week is a {{merge}} you have not paid for yet, growing while four other people edit the same files. The cost of merging does not rise with the size of your change. It rises with the size of everything that happened meanwhile on {{main}}.</p>
 <div data-pred="p-merge"></div>
 <div data-w="mergeCost"></div>
-<div class="callout warn"><b class="t">"GitLab reported no conflicts, so it is integrated and correct"</b>Not enough. Git compares text, so a merge with no conflicts can still be wrong (a function renamed on one side and called by its old name on the other). And GitLab checks a merge request only against the target branch as it is now, never against your other open merge requests. "Integrated" means merged <i>and</i> the tests are green.</div>` },
+<div class="callout warn"><b class="t">"GitLab reported no conflicts, so it is integrated and correct"</b>Not enough. Git compares text, so a merge with no conflicts can still be wrong (a function renamed on one side and called by its old name on the other). And GitLab checks a merge request only against the target branch as it is now, never against your other open merge requests. "Integrated" means merged <i>and</i> the tests are green.</div>
+<p class="muted small"><b>Course usage.</b> Many sources use "CI" to mean a build server or pipeline. This course defines it as the practice above; the server is one way to support it. Answer with the course's definition.</p>` },
       { id: 'c5s2', title: 'The daily stand-up', core: true, key: 'The one output that justifies a stand-up is an impediment, raised early and taken up.',
         html: `<p>The {{stand-up}} exists to surface what is in somebody's way (an {{impediment}}) while it is cheap to deal with.</p>
 <div data-w="standup"></div>` },

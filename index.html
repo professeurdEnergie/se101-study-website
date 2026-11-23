@@ -1473,10 +1473,10 @@ function mountWorked(el, def) {
     const st = def.stages[stage];
     let body = `<p><b>Problem.</b> ${st.problem}</p>`;
     if (st.type === 'full') {
-      body += `<ol class="steps">${st.steps.map(s => `<li><b>${s.h}</b> ${s.t}</li>`).join('')}</ol><button class="btn primary" data-go="1">Next: try one yourself</button>`;
+      body += `<ol class="steps">${st.steps.map(s => `<li><b>${s.h}</b> ${s.t}</li>`).join('')}</ol><button class="btn primary" data-wnext="1">Next: try one yourself</button>`;
     } else if (st.type === 'partial') {
       body += `<ol class="steps">${st.steps.map((s, i) => s.blank ? `<li class="blank"><b>${s.h}</b> ${s.pre || ''} <select data-b="${i}" aria-label="${esc(s.h)}"><option value="">choose…</option>${s.blank.options.map((o, k) => `<option value="${k}">${o}</option>`).join('')}</select> ${s.post || ''}<span class="bres" data-r="${i}"></span></li>` : `<li><b>${s.h}</b> ${s.t}</li>`).join('')}</ol>
-        <div class="row"><button class="btn primary" data-chk="1">Check my choices</button><button class="btn" data-reveal="1">Reveal</button><button class="btn good hide" data-go="1">Next: on your own</button></div><div id="wmsg" class="small" style="margin-top:8px" aria-live="polite"></div>`;
+        <div class="row"><button class="btn primary" data-chk="1">Check my choices</button><button class="btn" data-reveal="1">Reveal</button><button class="btn good hide" data-wnext="1">Next: on your own</button></div><div id="wmsg" class="small" style="margin-top:8px" aria-live="polite"></div>`;
     } else {
       body += `<div id="wrun"></div>`;
     }
@@ -1499,12 +1499,12 @@ function mountWorked(el, def) {
       sel.disabled = good || reveal;
     });
     $('#wmsg', el).textContent = ok === tot ? 'All steps complete.' : `${ok} of ${tot} correct. Adjust the others, or reveal.`;
-    if (ok === tot) $('[data-go]', el).classList.remove('hide');
+    if (ok === tot) $('[data-wnext]', el).classList.remove('hide');
   }
   el.onclick = e => {
     if (e.target.closest('[data-chk]')) check(false);
     else if (e.target.closest('[data-reveal]')) check(true);
-    else if (e.target.closest('[data-go]')) { stage = Math.min(2, stage + 1); S().we[def.id] = { stage }; Store.save(); draw(); }
+    else if (e.target.closest('[data-wnext]')) { stage = Math.min(2, stage + 1); S().we[def.id] = { stage }; Store.save(); draw(); }
   };
   draw();
 }

@@ -63,6 +63,8 @@ hr{border:0;border-top:1px solid var(--line);margin:18px 0}
 .btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:8px;padding:8px 14px;font-weight:550;transition:background .12s,border-color .12s}
 .btn:hover{background:var(--soft);border-color:#b9c1d6}
 .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff} .btn.primary:hover{background:var(--brand-d)}
+a.btn,a.btn:hover{text-decoration:none}
+a.btn{color:var(--ink)} a.btn.primary,a.btn.primary:hover{color:#fff}
 .btn.good{background:var(--good);border-color:var(--good);color:#fff}
 .btn.ghost{background:transparent}
 .btn.danger{color:var(--bad);border-color:#e6b0b0} .btn.danger:hover{background:var(--bad-bg)}
@@ -105,7 +107,7 @@ pre.code .hl{background:rgba(250,204,21,.16);display:inline-block;width:100%}
 /* glossary links */
 a.gl{color:inherit;text-decoration:underline dotted var(--brand);text-underline-offset:3px;cursor:help}
 a.gl.first{color:var(--brand-d);font-weight:600;text-decoration:underline solid var(--brand)}
-a.gl.first::after{content:"\1F4D6";font-size:.7em;margin-left:2px;vertical-align:super}
+a.gl.first::after{content:"g";font-size:.62em;font-weight:700;border:1px solid currentColor;border-radius:3px;padding:0 3px;margin-left:3px;vertical-align:super;line-height:1}
 
 /* svg */
 svg.dg{width:100%;height:auto;display:block;max-width:100%}
@@ -1082,8 +1084,8 @@ Widgets.waterfall = function (el) {
       g += `<path class="ln dash" d="M${x + 190} ${y + 62} V${y + 51} H${x + 40} V${y + 41}" marker-end="url(#${s.u}d)"/>`;
     }
   });
-  g += `<text x="640" y="40" class="lbl">Each phase is signed off before the next begins.</text>`;
-  g += `<text x="640" y="60" class="lbl">Each phase's output is a document the next phase consumes.</text>`;
+  g += `<text x="330" y="30" class="lbl">Each phase is signed off before the next begins.</text>`;
+  g += `<text x="330" y="50" class="lbl">Each phase's output is a document the next one consumes.</text>`;
   g += `<g><path class="ln" d="M24 292 H66" marker-end="url(#${s.u}a)"/><text x="74" y="296" class="lbl">hand-over to the next phase</text>
         <path class="ln dash" d="M300 292 H342" marker-end="url(#${s.u}d)"/><text x="350" y="296" class="lbl">feedback: only to the phase immediately before</text></g>`;
   g += `<text x="24" y="318" class="lbl">The customer appears in phase one and then vanishes. Nothing runs until very late.</text></svg>`;
@@ -1518,7 +1520,7 @@ function mountWorked(el, def) {
 /* ---------- Lesson 1 teaching content: 5 chunks of small sections ---------- */
 const L1CHUNKS = [
   {
-    id: 'c1', title: 'What a process is, and what makes it engineering', objs: ['O1'], minutes: 6,
+    id: 'c1', short: 'Process and engineering', title: 'What a process is, and what makes it engineering', objs: ['O1'], minutes: 6,
     quiz: { bank: ['q101', 'q103', 'q102', 'q105', 'q104'], n: 3 },
     sections: [
       { id: 'c1s1', title: 'What is a process?', core: true, key: 'A process is how something gets done. An engineering process is one you chose on purpose, can justify, and improve.',
@@ -1554,7 +1556,7 @@ const L1CHUNKS = [
     ],
   },
   {
-    id: 'c2', title: 'Process models, and the waterfall bet', objs: ['O1', 'O2', 'O3'], minutes: 9,
+    id: 'c2', short: 'Process models and waterfall', title: 'Process models, and the waterfall bet', objs: ['O1', 'O2', 'O3'], minutes: 9,
     quiz: { bank: ['q201', 'q202', 'q301', 'q203', 'q205', 'q303', 'q204', 'q206'], n: 3 },
     sections: [
       { id: 'c2s1', title: 'A process model: activities plus an ordering', core: true, key: 'The activities barely change between models. The ordering, and how often you go round, is the design decision.',
@@ -1567,7 +1569,7 @@ const L1CHUNKS = [
 <ul><li><b>Requirements:</b> four numbered requirements in the README (for example, reject anything that is not a triangle).</li><li><b>Design:</b> compute three side lengths, then apply Heron's formula. Where does the validity check belong? That was a design decision with two defensible answers.</li><li><b>Implementation:</b> the program's source file.</li><li><b>Testing:</b> a file of test inputs and a driver that runs them.</li><li><b>Maintenance:</b> what you actually did. You were handed working-ish code written by somebody else and had to understand it before changing it.</li></ul>
 <p>Most software work is maintenance. Lab 1 started you where industry actually is.</p>` },
       { id: 'c2s3', title: 'The waterfall model', core: true, key: 'Waterfall: sequential, signed-off phases; documents in between; the customer is there in phase one only.',
-        html: `<p>The {{waterfall}} model runs the activities as sequential phases. Each phase is {{sign-off|signed off}} before the next begins. Feedback goes only to the phase immediately before. It is documentation-driven: the output of each phase is a document that the next phase consumes.</p>
+        html: `<p>The {{waterfall}} runs the activities as sequential phases. Each phase is {{sign-off|signed off}} before the next begins. Feedback goes only to the phase immediately before. It is documentation-driven: the output of each phase is a document that the next phase consumes.</p>
 <div data-w="waterfall"></div>
 <div data-pred="p-wf"></div>` },
       { id: 'c2s4', title: 'What waterfall buys, and what it costs', core: true, key: 'The central problem: waterfall assumes you know what to build before you start.',
@@ -1584,11 +1586,11 @@ const L1CHUNKS = [
     ],
   },
   {
-    id: 'c3', title: 'The opposite bet: evolutionary and agile', objs: ['O3', 'O4'], minutes: 11,
+    id: 'c3', short: 'Evolutionary and agile', title: 'The opposite bet: evolutionary and agile', objs: ['O3', 'O4'], minutes: 11,
     quiz: { bank: ['q401', 'q402', 'q302', 'q403', 'q405', 'q406', 'q404', 'q304', 'q306'], n: 3 },
     sections: [
       { id: 'c3s1', title: 'The evolutionary model', core: true, key: 'Evolutionary: a series of working small systems. Besides the code, the requirements change between versions.',
-        html: `<p>The {{evolutionary}} model makes the opposite bet: that the requirements are <i>not</i> stable, and that the cheapest way to find them is to build something small and look at it. It builds a series of versions. <b>Each version is a complete, working, small system.</b> New versions implement new and evolved requirements, including the ones you only discovered by watching someone use the last version.</p>
+        html: `<p>The {{evolutionary}} makes the opposite bet: that the requirements are <i>not</i> stable, and that the cheapest way to find them is to build something small and look at it. It builds a series of versions. <b>Each version is a complete, working, small system.</b> New versions implement new and evolved requirements, including the ones you only discovered by watching someone use the last version.</p>
 <div data-w="evolutionary"></div>
 <p>So, besides the code, what is expected to change from version to version is <b>the requirements</b>. Waterfall treats them as fixed once its first phase is done.</p>
 <div class="callout warn"><b class="t">The cost</b>Without discipline it decays into {{build-and-fix}}: changes piled on without design or verification. The discipline is what the rest of the course is about.</div>` },
@@ -1609,7 +1611,7 @@ const L1CHUNKS = [
     ],
   },
   {
-    id: 'c4', title: 'Agile practices as a system', objs: ['O5'], minutes: 9,
+    id: 'c4', short: 'Practices as a system', title: 'Agile practices as a system', objs: ['O5'], minutes: 9,
     quiz: { bank: ['q507', 'q501', 'q502', 'q505', 'q506', 'q503', 'q504', 'q508'], n: 3 },
     sections: [
       { id: 'c4s1', title: 'Loops inside loops', core: true, key: 'Every loop ends in something that works and feeds the loop outside it. Miss one and the loops outside it run on guesses.',
@@ -1635,7 +1637,7 @@ const L1CHUNKS = [
     ],
   },
   {
-    id: 'c5', title: 'Staying integrated and visible', objs: ['O6'], minutes: 8,
+    id: 'c5', short: 'Integration, stand-up, board', title: 'Staying integrated and visible', objs: ['O6'], minutes: 8,
     quiz: { bank: ['q601', 'q609', 'q608', 'q603', 'q602', 'q604', 'q605', 'q607', 'q606'], n: 3 },
     sections: [
       { id: 'c5s1', title: 'Integrate at least daily', core: true, key: 'Merge cost grows with everything that happened meanwhile, not with the size of your own change.',
@@ -2240,6 +2242,8 @@ const L1PREDICTS = {
     reveal: '(a) None: nine cards share 3 units, so each gets one third of a unit per tick and all nine finish together at tick 12. (b) Six: three cards get one unit each per tick, finish every four ticks (3 at tick 4, 6 at tick 8). Same team, same work, but flow instead of waiting.' },
 };
 
+Object.keys(L1PREDICTS).forEach(k => { L1PREDICTS[k].id = k; });
+
 const L1WORKED = {
   'we-bet': { id: 'we-bet', title: 'Choosing a process: full example, then partly done, then alone', step: '',
     stages: [
@@ -2347,7 +2351,7 @@ function renderNav() {
   const link = (href, text, cls = '', extra = '') => `<a href="#${href}" class="${cls}${on(href)}">${text}${extra}</a>`;
   $('#nav').innerHTML = `<h4>Course</h4>${link('/', 'Home and plan')}${link('/overview', 'What the quiz tests')}${link('/glossary', 'Glossary')}
     <h4>Lesson 1</h4>${link('/l1', 'Lesson overview')}${link('/l1/prereq', 'Prerequisite check', '', tick('prereq'))}
-    ${L.chunks.map((c, i) => link('/l1/learn/' + c.id, `${i + 1}. ${esc(c.title.length > 30 ? c.title.slice(0, 29) + '…' : c.title)}`, '', Progress.stepDone('quiz-' + c.id) ? '<span class="tick">✓</span>' : '')).join('')}
+    ${L.chunks.map((c, i) => link('/l1/learn/' + c.id, `${i + 1}. ${esc(c.short || c.title)}`, '', Progress.stepDone('quiz-' + c.id) ? '<span class="tick">✓</span>' : '')).join('')}
     ${link('/l1/cards', 'Flashcards', '', tick('cards'))}${link('/l1/games', 'Games', '', tick('game'))}${link('/l1/review', 'Mixed review', '', tick('review'))}${link('/l1/summary', 'Summary and next steps', '', tick('summary'))}
     <h4>Later lessons</h4>${PLAN.slice(1).map(p => `<a class="locked" href="#/" title="Not built yet. Continue in a new chat with the summary text.">${p.n}. ${esc(p.title.split(':')[0].replace(/ in software engineering/, ''))}</a>`).join('')}
     <h4>Progress</h4><a href="#/" data-reset="1" style="color:var(--bad)">Reset all progress…</a>`;

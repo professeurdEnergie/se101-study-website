@@ -788,7 +788,7 @@ const Cards = {
     const s = Cards.st(c); s.seen++; s.last = now;
     if (r === 'again') { s.box = 0; s.lapses++; s.again++; s.due = now; }
     else if (r === 'hard') { s.box = Math.max(1, s.box - 1); s.hard++; s.due = now + Cards.INTERVALS[1]; }
-    else { s.box = Math.min(5, s.box + 1); s.easy++; s.due = now + Cards.INTERVALS[s.box]; }
+    else { s.box = Math.min(5, s.box === 0 ? 2 : s.box + 1); s.easy++; s.due = now + Cards.INTERVALS[s.box]; }
     Store.save();
   },
   counts(lesson) {
@@ -810,7 +810,7 @@ Views.cards = function (el, lesson, params) {
   function start(m) {
     mode = m; queue = Cards.queue(lesson, mode); total = queue.length; done = 0; flipped = false; undo = null; draw();
   }
-  function boxes(c) { const b = Cards.st(c).box; return `<span class="boxes" title="Box ${b} of 5">${[1, 2, 3, 4, 5].map(i => `<i class="${i <= b ? 'f' : ''}"></i>`).join('')}</span>`; }
+  function boxes(c) { const b = (S().cards[c.id] || { box: 0 }).box; return `<span class="boxes" title="Box ${b} of 5">${[1, 2, 3, 4, 5].map(i => `<i class="${i <= b ? 'f' : ''}"></i>`).join('')}</span>`; }
   function header() {
     const k = Cards.counts(lesson);
     return `<div class="row spread" style="margin-bottom:12px"><div><h2 style="margin:0">Flashcards</h2><span class="muted small">${k.total} cards · ${k.new} new · ${k.learning} learning · ${k.known} known</span></div>

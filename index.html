@@ -2416,7 +2416,7 @@ const Router = {
     const path = curPath();
     let hit = false;
     for (const [re, fn] of Router.routes) {
-      const m = re.exec(path); if (m) { hit = true; try { fn(el, m); } catch (err) { el.innerHTML = `<div class="callout bad"><b class="t">Something went wrong</b><p>${esc(err.message)}</p><p><a href="#/">Back to the home page</a></p></div>`; console.error(err); } break; }
+      const m = re.exec(path); if (m) { hit = true; try { fn(el, m); } catch (err) { if (err.notFound) { el.innerHTML = '<h2>Page not found</h2><p><a href="#/">Back to the home page</a></p>'; break; } el.innerHTML = `<div class="callout bad"><b class="t">Something went wrong</b><p>${esc(err.message)}</p><p><a href="#/">Back to the home page</a></p></div>`; console.error(err); } break; }
     }
     if (!hit) el.innerHTML = '<h2>Page not found</h2><p><a href="#/">Back to the home page</a></p>';
     renderNav(); App.refreshChrome && App.refreshChrome(); renderMath(el);
@@ -2466,7 +2466,7 @@ Router.add(/^overview$/, el => {
   <h3>The ideas that recur across modules</h3>
   <ul><li>A process model is a <b>bet</b> about the requirements.</li><li>Passing tests are <b>evidence, not proof</b>.</li><li>A commit is a <b>snapshot</b>; a branch is a <b>label</b>.</li><li>When the secret changes, nobody outside the module should have to (information hiding).</li><li>One fact in one place (databases).</li><li><b>Authorship is not accountability</b>; approving is signing.</li><li>Software fails <b>systematically</b>: accidents trace to requirements, not typos.</li></ul>
   <h3>Where the course's wording differs from common usage</h3>
-  <ul><li><b>Process model</b> is the course's word; elsewhere you will see SDLC or life-cycle model.</li><li><b>Continuous integration</b> is defined here as a practice (merge at least daily, tests green before and after). Many sources use "CI" for the build server or pipeline.</li><li><b>Quality requirement</b> is used instead of "non-functional requirement", because "non-functional" sounds optional.</li><li>The course writes <b>evolutionary</b>, and lumps "iterative or evolutionary" together (Quiz 1, 1a); some textbooks distinguish iterative, incremental and evolutionary.</li><li>The XP slide says "twelve named practices" but the deck names eleven. Do not memorise a count.</li></ul>
+  <ul><li><b>Process model</b> is the course's word; elsewhere you will see SDLC or life-cycle model.</li><li><b>Continuous integration</b> is defined here as a practice (merge at least daily, tests green before and after). Many sources use "CI" for the build server or pipeline.</li><li><b>Quality requirement</b> is used instead of "non-functional requirement", because "non-functional" sounds optional.</li><li>The course writes <b>evolutionary</b>, and lumps "iterative or evolutionary" together (Quiz 1, 1a); some textbooks distinguish iterative, incremental and evolutionary.</li><li>The XP slide says "twelve named practices" but the list on the next slide has fewer. Do not memorise a count.</li></ul>
   <h3>Notation you will meet</h3>
   <table class="t"><tr><th>Notation</th><th>Meaning</th></tr>
   <tr><td><code>origin/main</code> vs <code>git push origin main</code></td><td>One name (a remote-tracking reference) vs two arguments (remote, then branch)</td></tr>
@@ -2518,7 +2518,7 @@ Router.add(/^l1\/prereq$/, el => {
 
 function visibleSections(chunk) { const full = S().settings.depth === 'full'; return chunk.sections.filter(s => full || s.core); }
 Router.add(/^l1\/learn\/(c\d)(?:\/(c\ds\d))?$/, (el, m) => {
-  const L = LESSONS.l1, ci = L.chunks.findIndex(c => c.id === m[1]); if (ci < 0) throw new Error('Unknown chunk');
+  const L = LESSONS.l1, ci = L.chunks.findIndex(c => c.id === m[1]); if (ci < 0) throw Object.assign(new Error('Unknown chunk'), { notFound: true });
   const chunk = L.chunks[ci];
   let list = visibleSections(chunk);
   let cur = m[2] ? chunk.sections.find(s => s.id === m[2]) : (list.find(s => !S().seen[s.id]) || list[0]);
@@ -2549,7 +2549,7 @@ Router.add(/^l1\/learn\/(c\d)(?:\/(c\ds\d))?$/, (el, m) => {
 });
 
 Router.add(/^l1\/quiz\/(c\d)$/, (el, m) => {
-  const L = LESSONS.l1, ci = L.chunks.findIndex(c => c.id === m[1]); if (ci < 0) throw new Error('Unknown chunk');
+  const L = LESSONS.l1, ci = L.chunks.findIndex(c => c.id === m[1]); if (ci < 0) throw Object.assign(new Error('Unknown chunk'), { notFound: true });
   const chunk = L.chunks[ci], nxt = L.chunks[ci + 1];
   const mm = Progress.mastery(chunk.objs[chunk.objs.length - 1]);
   el.innerHTML = `<p class="crumbs"><a href="#/">Home</a> › <a href="#/l1">Lesson 1</a> › <a href="#/l1/learn/${chunk.id}">Chunk ${ci + 1}</a> › Check</p><h1>Check: ${esc(chunk.title)}</h1>
